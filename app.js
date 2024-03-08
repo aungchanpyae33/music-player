@@ -19,6 +19,7 @@ let previousAudio;
 let isPLaying = false;
 let songLength;
 let previousSong;
+
 // fetch the data from song.php to get the file list in music folder;
 
 // fetch("api/fetch.php")
@@ -163,6 +164,7 @@ function songSheft(e, item) {
         document.querySelector(".audio-main").classList.add("see");
         audioEl.src = xhr.responseText;
         console.log(xhr.responseText);
+        console.log(audioEl);
         audioEl.play();
         audioEl.addEventListener("timeupdate", (e) => {
           ({ duration, currentTime: Ctime } = e.target);

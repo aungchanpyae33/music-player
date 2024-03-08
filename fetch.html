@@ -7,19 +7,7 @@
   </head>
   <body>
     <div class="container"></div>
-    <script>
-      fetch("api/fetch1.php")
-        .then((res) => res.json())
-        .then((datas) => {
-          console.log(datas);
-          datas.map((data) => {
-            console.log(data);
-            const audio = document.createElement("audio");
-            audio.setAttribute("controls", "");
-            audio.src = `${data}`;
-            document.querySelector(".container").appendChild(audio);
-          });
-        });
-    </script>
+    <p>hi</p>
+    <script type="module" src="api/data.js"></script>
   </body>
 </html>
