@@ -16,19 +16,18 @@ if (!$conn) {
 //   echo "Connected to database";
 
   // Your query and data processing logic here:
-  $sql = "SELECT Column1  FROM your_table_name"; // Modify as needed
+  $sql = "SELECT MusicUrl  FROM music_folder WHERE id = 1"; // Modify as needed
   $result = pg_query($conn, $sql);
-//   if ($result) {
-//     while ($row = pg_fetch_assoc($result)) {
-        
-//         print_r($row['column1']);
-//       // Access and process data from $row
-//     }
-//     pg_free_result($result);
-//   } else {
-//     echo "Error executing query: " . pg_last_error($conn);
-//   }
-// }
+  if ($result) {
+    while ($row = pg_fetch_assoc($result)) {
+        print_r(json_encode($row['musicurl']));
+      // Access and process data from $row
+    }
+    pg_free_result($result);
+  } else {
+    echo "Error executing query: " . pg_last_error($conn);
+  }
+}
 
 pg_close($conn); // Close the connection after use
 ?>

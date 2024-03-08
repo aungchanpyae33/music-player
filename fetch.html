@@ -7,7 +7,16 @@
   </head>
   <body>
     <div class="container"></div>
-    <p>hi</p>
-    <script type="module" src="api/data.js"></script>
+    <audio src="" autoplay controls></audio>
+    <script>
+      const audio = document.querySelector("audio");
+      async function test() {
+        const fetchData = await fetch("api/connect.php");
+        const data = await fetchData.json();
+        console.log(data);
+        audio.src = data;
+      }
+      test();
+    </script>
   </body>
 </html>
