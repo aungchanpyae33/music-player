@@ -36,7 +36,7 @@ let previousSong;
 // nextButton.addEventListener("click", back);
 // backButton.addEventListener("click", next);
 async function generate() {
-  const url = "api/connect.php";
+  const url = "api/fetch1.php";
   const fetchData = await fetch(url);
   const jsonData = await fetchData.json();
   console.log(jsonData);
@@ -47,17 +47,16 @@ async function generate() {
     console.log(item);
     const linkEl = document.createElement("a");
     linkEl.textContent = "click";
-    linkEl.href = item.musicurl;
+    linkEl.href = item;
 
     linkEl.className = "col-6 col-md-4 col-lg-3";
     document.querySelector(".link-container").appendChild(linkEl);
     linkEl.addEventListener("click", (e) => {
       // reset the audio;
       e.preventDefault();
-      let link = e.target.href;
-      songSheft(e, link);
-      console.log(link);
-      previousSong = link;
+      songSheft(e, item);
+      console.log(item);
+      previousSong = item;
     });
   });
   audioEl.addEventListener("ended", (e) => {
@@ -161,7 +160,7 @@ function songSheft(e, link) {
   isPLaying = false;
   e.preventDefault();
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", "api/play.php", true);
+  xhr.open("POST", "api/fetch.php", true);
   xhr.setRequestHeader("Content-Type", "application/json");
   https: xhr.onreadystatechange = function () {
     if (xhr.readyState === XMLHttpRequest.DONE) {
