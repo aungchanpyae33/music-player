@@ -13,7 +13,7 @@ $conn = pg_connect($conn_string);
 if (!$conn) {
   echo "Failed to connect to database: " . pg_last_error();
 } else {
-  $sql = "SELECT MusicUrl FROM music_folder"; // Modify as needed
+  $sql = "SELECT username FROM users"; // Modify as needed
   $result = pg_query($conn, $sql);
 
   if ($result) {

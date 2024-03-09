@@ -36,7 +36,7 @@ let previousSong;
 // nextButton.addEventListener("click", back);
 // backButton.addEventListener("click", next);
 async function generate() {
-  const url = "api/fetch1.php";
+  const url = "api/connect.php";
   const fetchData = await fetch(url);
   const jsonData = await fetchData.json();
   console.log(jsonData);
@@ -44,19 +44,19 @@ async function generate() {
   console.log(songLength);
   document.querySelector(".lds-ellipsis").classList.add("hide");
   jsonData.map((item) => {
-    console.log(item);
+    console.log(item.username);
     const linkEl = document.createElement("a");
     linkEl.textContent = "click";
-    linkEl.href = item;
-
+    linkEl.href = item.username;
     linkEl.className = "col-6 col-md-4 col-lg-3";
     document.querySelector(".link-container").appendChild(linkEl);
     linkEl.addEventListener("click", (e) => {
       // reset the audio;
+      let link = e.target.getAttribute("href");
       e.preventDefault();
-      songSheft(e, item);
-      console.log(item);
-      previousSong = item;
+      songSheft(e, link);
+      console.log(link);
+      previousSong = link;
     });
   });
   audioEl.addEventListener("ended", (e) => {
@@ -187,6 +187,6 @@ function songSheft(e, link) {
     }
   };
   var data = JSON.stringify({ song: link });
-  console.log(data);
+  console.log(link);
   xhr.send(data);
 }

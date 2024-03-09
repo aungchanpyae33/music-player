@@ -1,4 +1,4 @@
-<?php
+<!-- <?php
 require  __DIR__ .'/../vendor/autoload.php';
 
 use Aws\S3\S3Client;
@@ -21,12 +21,33 @@ try {
         'Bucket' => $bucketName
     ]);
 
+    $host = "ep-silent-bread-a1benv68.ap-southeast-1.aws.neon.tech";
+$port = "5432";
+$dbname = "verceldb";
+$user = 'default';
+$password = "bzQHjT5ok2xO";
+$sslmode = "require";
+$endpoint = "ep-silent-bread-a1benv68";
+$conn_string = "host=$host port=$port dbname=$dbname user=$user password=$password sslmode=$sslmode options= 'endpoint=ep-silent-bread-a1benv68'";
+
+$conn = pg_connect($conn_string);
+
+// Close the connection after use
+
     // Extract filenames from the list of objects
     $filenames = [];
     foreach ($objects['Contents'] as $object) {
         $filenames[] = $object['Key'];
-       
+        if (!$conn) {
+            echo "Failed to connect to database: " . pg_last_error();
+          } else {
+            $sql = "INSERT INTO users(username) VALUES('$object[Key]')";
+            $result = pg_query($conn, $sql);
+            }
+          
+        
     }
+    pg_close($conn); 
      $data = json_encode($filenames);
         print_r($data);
     
@@ -36,5 +57,5 @@ try {
 } catch (AwsException $e) {
     echo "Error listing objects: " . $e->getMessage();
 }
-?>
+?> -->
 

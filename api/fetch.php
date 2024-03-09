@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $bucketName,
              $fileName,
         );
-        $data = $result;
+        $data =  $result;
         print_r($data);
     } catch (AwsException $e) {
         echo "Error downloading file: " . $e->getMessage();
