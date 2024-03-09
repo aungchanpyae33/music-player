@@ -25,11 +25,13 @@ try {
     $filenames = [];
     foreach ($objects['Contents'] as $object) {
         $filenames[] = $object['Key'];
+       
     }
-
+     $data = json_encode($filenames);
+        print_r($data);
+    
     // Now $filenames will contain an array of all filenames in the bucket
-    $data = json_encode($filenames);
-    print_r($data);
+   
 
 } catch (AwsException $e) {
     echo "Error listing objects: " . $e->getMessage();

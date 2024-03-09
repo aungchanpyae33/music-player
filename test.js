@@ -19,7 +19,7 @@ let previousAudio;
 let isPLaying = false;
 let songLength;
 let previousSong;
-
+let link;
 // fetch the data from song.php to get the file list in music folder;
 
 // fetch("api/fetch.php")
@@ -44,20 +44,16 @@ async function generate() {
   console.log(songLength);
   document.querySelector(".lds-ellipsis").classList.add("hide");
   jsonData.map((item) => {
-    console.log(item);
     const linkEl = document.createElement("a");
     linkEl.textContent = "click";
     linkEl.href = item.musicurl;
-
     linkEl.className = "col-6 col-md-4 col-lg-3";
     document.querySelector(".link-container").appendChild(linkEl);
+    link = item.musicurl;
     linkEl.addEventListener("click", (e) => {
       // reset the audio;
-      e.preventDefault();
-      let link = e.target.href;
       songSheft(e, link);
-      console.log(link);
-      previousSong = link;
+      previousSong = item;
     });
   });
   audioEl.addEventListener("ended", (e) => {
@@ -156,38 +152,40 @@ function withActivated(audio, e) {
   para.querySelector(".p-bar").style.width = `${ePer}%`;
 }
 
-function songSheft(e, link) {
+function songSheft(e, item) {
   button.textContent = "pause";
   isPLaying = false;
   e.preventDefault();
-  var xhr = new XMLHttpRequest();
-  xhr.open("POST", "api/play.php", true);
-  xhr.setRequestHeader("Content-Type", "application/json");
-  https: xhr.onreadystatechange = function () {
-    if (xhr.readyState === XMLHttpRequest.DONE) {
-      if (xhr.status === 200) {
-        document.querySelector(".audio-main").classList.add("see");
-        audioEl.src = xhr.responseText;
-        console.log(xhr.responseText);
-        console.log(audioEl);
-        audioEl.play();
-        audioEl.addEventListener("timeupdate", (e) => {
-          ({ duration, currentTime: Ctime } = e.target);
-          Time(duration, audioEl);
-        });
-        document.querySelector(".bar").addEventListener("click", (e) => {
-          withActivated(audioEl, e);
-        });
+  console.log(item);
+  document.querySelector(".audio-main").classList.add("see");
+  console.log(item);
+  audioEl.src = item;
+  console.log(audioEl);
+  audioEl.play();
+  audioEl.addEventListener("timeupdate", (e) => {
+    ({ duration, currentTime: Ctime } = e.target);
+    Time(duration, audioEl);
+  });
+  document.querySelector(".bar").addEventListener("click", (e) => {
+    withActivated(audioEl, e);
+  });
 
-        button.removeEventListener("click", toggle);
-        // to  avoid overlap event
-        button.addEventListener("click", toggle);
-      } else {
-        console.error("Error:", xhr.status);
-      }
-    }
-  };
-  var data = JSON.stringify({ song: link });
-  console.log(data);
-  xhr.send(data);
+  button.removeEventListener("click", toggle);
+  // to  avoid overlap event
+  button.addEventListener("click", toggle);
+  // var xhr = new XMLHttpRequest();
+  // xhr.open("POST", "api/fetch.php", true);
+  // xhr.setRequestHeader("Content-Type", "application/json");
+  // https: xhr.onreadystatechange = function () {
+  // if (xhr.readyState === XMLHttpRequest.DONE) {
+  // if (xhr.status === 200) {
+
+  // } else {
+  //   console.error("Error:", xhr.status);
+  // }
+
+  // };
+  // var data = JSON.stringify({ song: item });
+  // console.log(data);
+  // xhr.send(data);
 }

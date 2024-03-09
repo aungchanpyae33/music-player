@@ -13,21 +13,20 @@ $conn = pg_connect($conn_string);
 if (!$conn) {
   echo "Failed to connect to database: " . pg_last_error();
 } else {
-//   echo "Connected to database";
-
-  // Your query and data processing logic here:
-  $sql = "SELECT MusicUrl  FROM music_folder WHERE id = 1"; // Modify as needed
+  $sql = "SELECT MusicUrl FROM music_folder"; // Modify as needed
   $result = pg_query($conn, $sql);
+
   if ($result) {
+    $file = [];
     while ($row = pg_fetch_assoc($result)) {
-        print_r(json_encode($row['musicurl']));
-      // Access and process data from $row
+      $file[] = $row;
     }
-    pg_free_result($result);
+    print_r(json_encode($file));
+
   } else {
     echo "Error executing query: " . pg_last_error($conn);
   }
 }
-
 pg_close($conn); // Close the connection after use
+
 ?>
