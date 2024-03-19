@@ -17,11 +17,9 @@ if (!$conn) {
   $result = pg_query($conn, $sql);
 
   if ($result) {
-    $file = [];
-    while ($row = pg_fetch_assoc($result)) {
-      $file[] = $row;
-    }
+    $file = pg_fetch_all($result);
     print_r(json_encode($file));
+    // print_r(json_encode($file));
 
   } else {
     echo "Error executing query: " . pg_last_error($conn);
