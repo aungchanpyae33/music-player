@@ -3,6 +3,6 @@
     "api/*.php": {
       "runtime": "vercel-php@0.6.1"
     },
-    "region": "ap-southeast-1"
+    "region": ["ap-southeast-1"]
   }
 }
