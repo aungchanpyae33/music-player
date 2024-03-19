@@ -1,5 +1,8 @@
 const backButton = document.querySelector(".back");
 
+// import a plugin
+
+// Note: Never import/require the *.min.js files from the npm package.
 const audioEl = document.querySelector("audio");
 const nextButton = document.querySelector(".next");
 const img = document.querySelector("img");
@@ -40,6 +43,7 @@ async function generate() {
   const fetchData = await fetch(url);
   const jsonData = await fetchData.json();
   console.log(jsonData);
+  console.log(document.querySelector("img").setAttribute("data-src", jsonData));
   songLength = jsonData.length;
   console.log(songLength);
   document.querySelector(".lds-ellipsis").classList.add("hide");
@@ -54,6 +58,7 @@ async function generate() {
       // reset the audio;
       let link = e.target.getAttribute("href");
       e.preventDefault();
+      document.querySelector(".audio-main").classList.add("see");
       songSheft(e, link);
       console.log(link);
       previousSong = link;
@@ -165,7 +170,6 @@ function songSheft(e, link) {
   https: xhr.onreadystatechange = function () {
     if (xhr.readyState === XMLHttpRequest.DONE) {
       if (xhr.status === 200) {
-        document.querySelector(".audio-main").classList.add("see");
         audioEl.src = xhr.responseText;
         console.log(xhr.responseText);
         console.log(audioEl);
