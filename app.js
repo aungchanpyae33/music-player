@@ -73,6 +73,7 @@ async function generate() {
 
 //
 generate();
+go();
 // to get timeupadte
 function Time(duration, item) {
   // isstart means is it initial state or playing
@@ -193,4 +194,9 @@ function songSheft(e, link) {
   var data = JSON.stringify({ song: link });
   console.log(link);
   xhr.send(data);
+}
+async function go() {
+  const fetchData = await fetch("api/song.php");
+  const data = await fetchData.json();
+  console.log(data);
 }
