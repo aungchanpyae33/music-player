@@ -43,7 +43,7 @@ async function generate() {
   const fetchData = await fetch(url);
   const jsonData = await fetchData.json();
   console.log(jsonData);
-  console.log(document.querySelector("img").setAttribute("data-src", jsonData));
+
   songLength = jsonData.length;
   console.log(songLength);
   document.querySelector(".lds-ellipsis").classList.add("hide");
@@ -196,7 +196,8 @@ function songSheft(e, link) {
   xhr.send(data);
 }
 async function go() {
-  const fetchData = await fetch("api/song.php");
+  const fetchData = await fetch("api/photo.php");
   const data = await fetchData.json();
   console.log(data);
+  document.querySelector("img").src = data;
 }

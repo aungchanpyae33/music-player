@@ -25,7 +25,7 @@ use Aws\Exception\AwsException;
              $fileName,
         );
         $data =  $result;
-        print_r($data);
+        print_r(json_encode($data));
     } catch (AwsException $e) {
         echo "Error downloading file: " . $e->getMessage();
     }
