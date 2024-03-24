@@ -18,18 +18,17 @@ if (!$conn) {
     $data = json_decode(file_get_contents('php://input'), true);
     // Access the data
     $key1 = $data['song'];
-    $sql = "SELECT MusicUrl FROM music_folder WHERE musicurl = $1";
-    $result = pg_prepare($conn, "my_query", $sql);  // Prepare the statement
-    
-    if ($result) {
-      $result = pg_execute($conn, "my_query", array($key1)); // Bind the parameter
-      // ... process results ...
-      while ($row = pg_fetch_assoc($result)) {
-        print_r($row['musicurl']);
-      }
-    } else {
-      echo "Error preparing query: " . pg_last_error($conn);
-    }
+    $sql = "SELECT name FROM music WHERE id = $key1";
+    $result = pg_query($conn, $sql);
+
+  if ($result) {
+    $file = pg_fetch_all($result);
+    print_r(json_encode($file));
+    // print_r(json_encode($file));
+
+  } else {
+    echo "Error executing query: " . pg_last_error($conn);
+  }
   }}
 
 pg_close($conn); // Close the connection after use

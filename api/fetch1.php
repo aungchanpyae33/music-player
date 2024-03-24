@@ -1,4 +1,4 @@
-<!-- <?php
+<?php
 require  __DIR__ .'/../vendor/autoload.php';
 
 use Aws\S3\S3Client;
@@ -37,15 +37,16 @@ $conn = pg_connect($conn_string);
     // Extract filenames from the list of objects
     $filenames = [];
     foreach ($objects['Contents'] as $object) {
-        $filenames[] = $object['Key'];
+        $encodedFilename = rawurlencode( $object['Key']);
+        $Filename =$object['Key'];
         if (!$conn) {
             echo "Failed to connect to database: " . pg_last_error();
           } else {
-            $sql = "INSERT INTO users(username) VALUES('$object[Key]')";
+            $sql = "INSERT INTO music (name,email) VALUES('https://s3.tebi.io/music2/$encodedFilename' ,
+            '$Filename'
+            )";
             $result = pg_query($conn, $sql);
             }
-          
-        
     }
     pg_close($conn); 
      $data = json_encode($filenames);
@@ -57,5 +58,5 @@ $conn = pg_connect($conn_string);
 } catch (AwsException $e) {
     echo "Error listing objects: " . $e->getMessage();
 }
-?> -->
+?>
 

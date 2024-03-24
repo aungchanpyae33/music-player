@@ -48,10 +48,10 @@ async function generate() {
   console.log(songLength);
   document.querySelector(".lds-ellipsis").classList.add("hide");
   jsonData.map((item) => {
-    console.log(item.username);
+    console.log(item.email);
     const linkEl = document.createElement("a");
     linkEl.textContent = "click";
-    linkEl.href = item.username;
+    linkEl.href = item.id;
     linkEl.className = "col-6 col-md-4 col-lg-3";
     document.querySelector(".link-container").appendChild(linkEl);
     linkEl.addEventListener("click", (e) => {
@@ -73,7 +73,7 @@ async function generate() {
 
 //
 generate();
-go();
+
 // to get timeupadte
 function Time(duration, item) {
   // isstart means is it initial state or playing
@@ -166,13 +166,15 @@ function songSheft(e, link) {
   isPLaying = false;
   e.preventDefault();
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", "api/fetch.php", true);
+  xhr.open("POST", "api/play.php", true);
+  xhr.responseType = "json";
   xhr.setRequestHeader("Content-Type", "application/json");
   https: xhr.onreadystatechange = function () {
     if (xhr.readyState === XMLHttpRequest.DONE) {
       if (xhr.status === 200) {
-        audioEl.src = xhr.responseText;
-        console.log(xhr.responseText);
+        console.log(xhr.response);
+        audioEl.src = this.response[0].name;
+        console.log(xhr.response[0].name);
         console.log(audioEl);
         audioEl.play();
         audioEl.addEventListener("timeupdate", (e) => {
@@ -194,10 +196,4 @@ function songSheft(e, link) {
   var data = JSON.stringify({ song: link });
   console.log(link);
   xhr.send(data);
-}
-async function go() {
-  const fetchData = await fetch("api/warm_up.php");
-  const data = await fetchData.json();
-  console.log(data);
-  document.querySelector("img").src = data;
 }
