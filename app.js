@@ -196,7 +196,7 @@ function songSheft(e, link) {
   xhr.send(data);
 }
 async function go() {
-  const fetchData = await fetch("api/photo.php");
+  const fetchData = await fetch("api/warm_up.php");
   const data = await fetchData.json();
   console.log(data);
   document.querySelector("img").src = data;
