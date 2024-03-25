@@ -1,4 +1,5 @@
 <?php
+header('Access-Control-Allow-Origin: *'); 
 $host = "ep-silent-bread-a1benv68.ap-southeast-1.aws.neon.tech";
 $port = "5432";
 $dbname = "verceldb";

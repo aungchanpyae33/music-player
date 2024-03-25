@@ -1,3 +1,5 @@
+import cacheAudioFile from "./service-worker.js";
+import playCachedAudioFile from "./cacheSong.js";
 const backButton = document.querySelector(".back");
 
 // import a plugin
@@ -104,19 +106,7 @@ function Time(duration, item) {
     end.querySelector(".p-bar").style.width = `${(Ctime / duration) * 100}%`;
   }
 }
-// Get data
-function exitLoop() {}
-// document.querySelector(".delete").addEventListener("click", () => {
-//   const img = document.querySelector("img").getAttribute("src");
-//   const audio = document.querySelector("audio").getAttribute("src");
-//   console.log(img, audio);
-//   console.log(
-//     (document.querySelector(
-//       ".delete"
-//     ).href = `_actions/delete.php?key=${img}&&key1=${audio}`)
-//   );
-// });
-// next song back song
+
 function next() {
   songIndex++;
   if (songIndex > some.length - 1) {
@@ -161,39 +151,46 @@ function withActivated(audio, e) {
   para.querySelector(".p-bar").style.width = `${ePer}%`;
 }
 
-function songSheft(e, link) {
+async function songSheft(e, link) {
   button.textContent = "pause";
   isPLaying = false;
   e.preventDefault();
-  var xhr = new XMLHttpRequest();
-  xhr.open("POST", "api/play.php", true);
-  xhr.responseType = "json";
-  xhr.setRequestHeader("Content-Type", "application/json");
-  https: xhr.onreadystatechange = function () {
-    if (xhr.readyState === XMLHttpRequest.DONE) {
-      if (xhr.status === 200) {
-        console.log(xhr.response);
-        audioEl.src = this.response[0].name;
-        console.log(xhr.response[0].name);
-        console.log(audioEl);
-        audioEl.play();
-        audioEl.addEventListener("timeupdate", (e) => {
-          ({ duration, currentTime: Ctime } = e.target);
-          Time(duration, audioEl);
-        });
-        document.querySelector(".bar").addEventListener("click", (e) => {
-          withActivated(audioEl, e);
-        });
+  const cache = await caches.open("audio-cache");
+  const cachedResponse = await cache.match(link);
+  if (cachedResponse) {
+    playCachedAudioFile(cachedResponse, audioEl);
+  } else {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "api/play.php", true);
+    xhr.responseType = "json";
+    xhr.setRequestHeader("Content-Type", "application/json");
+    https: xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          console.log(xhr.response);
+          audioEl.src = this.response[0].name;
+          console.log(xhr.response[0].name);
+          console.log(audioEl);
+          audioEl.play();
+          cacheAudioFile(xhr.response[0].name, link);
+          audioEl.addEventListener("timeupdate", (e) => {
+            ({ duration, currentTime: Ctime } = e.target);
+            Time(duration, audioEl);
+          });
+          document.querySelector(".bar").addEventListener("click", (e) => {
+            withActivated(audioEl, e);
+          });
 
-        button.removeEventListener("click", toggle);
-        // to  avoid overlap event
-        button.addEventListener("click", toggle);
-      } else {
-        console.error("Error:", xhr.status);
+          button.removeEventListener("click", toggle);
+          // to  avoid overlap event
+          button.addEventListener("click", toggle);
+        } else {
+          console.error("Error:", xhr.status);
+        }
       }
-    }
-  };
-  var data = JSON.stringify({ song: link });
-  console.log(link);
-  xhr.send(data);
+    };
+    var data = JSON.stringify({ song: link });
+    console.log(link);
+    xhr.send(data);
+  }
 }
