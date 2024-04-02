@@ -155,7 +155,10 @@ async function songSheft(e, link) {
   e.preventDefault();
   const cache = await caches.open("audio-cache");
   const cachedResponse = await cache.match(link);
+  console.log(cachedResponse);
   if (cachedResponse) {
+    console.log(cachedResponse);
+    console.log("hi");
     playCachedAudioFile(cachedResponse, audioEl);
   } else {
     var xhr = new XMLHttpRequest();

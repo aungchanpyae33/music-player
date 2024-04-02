@@ -2,6 +2,7 @@ const audioCacheName = "audio-cache";
 
 async function playCachedAudioFile(cachedResponse, element) {
   try {
+    console.log(cachedResponse);
     if (cachedResponse) {
       const blob = await cachedResponse.blob();
       const objectURL = URL.createObjectURL(blob);
