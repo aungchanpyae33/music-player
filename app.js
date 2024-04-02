@@ -44,13 +44,11 @@ async function generate() {
   const url = "api/connect.php";
   const fetchData = await fetch(url);
   const jsonData = await fetchData.json();
-  console.log(jsonData);
 
   songLength = jsonData.length;
-  console.log(songLength);
+
   document.querySelector(".lds-ellipsis").classList.add("hide");
   jsonData.map((item) => {
-    console.log(item.email);
     const linkEl = document.createElement("a");
     linkEl.textContent = "click";
     linkEl.href = item.id;
@@ -62,7 +60,7 @@ async function generate() {
       e.preventDefault();
       document.querySelector(".audio-main").classList.add("see");
       songSheft(e, link);
-      console.log(link);
+
       previousSong = link;
     });
   });
@@ -128,7 +126,7 @@ function toggle() {
   if (!isPLaying) {
     button.textContent = "play";
     audioEl.pause();
-    console.log("g");
+
     isPLaying = true;
   } else {
     button.textContent = "pause";
@@ -167,12 +165,10 @@ async function songSheft(e, link) {
     https: xhr.onreadystatechange = function () {
       if (xhr.readyState === XMLHttpRequest.DONE) {
         if (xhr.status === 200) {
-          console.log(xhr.response);
           audioEl.src = this.response[0].name;
-          console.log(xhr.response[0].name);
-          console.log(audioEl);
+          console.log(this.response[0].name);
           audioEl.play();
-          cacheAudioFile(xhr.response[0].name, link);
+
           audioEl.addEventListener("timeupdate", (e) => {
             ({ duration, currentTime: Ctime } = e.target);
             Time(duration, audioEl);
@@ -185,12 +181,11 @@ async function songSheft(e, link) {
           // to  avoid overlap event
           button.addEventListener("click", toggle);
         } else {
-          console.error("Error:", xhr.status);
         }
       }
     };
     var data = JSON.stringify({ song: link });
-    console.log(link);
+
     xhr.send(data);
   }
 }
