@@ -168,18 +168,7 @@ async function songSheft(e, link) {
           audioEl.src = this.response[0].name;
           console.log(this.response[0].name);
           audioEl.play();
-
-          audioEl.addEventListener("timeupdate", (e) => {
-            ({ duration, currentTime: Ctime } = e.target);
-            Time(duration, audioEl);
-          });
-          document.querySelector(".bar").addEventListener("click", (e) => {
-            withActivated(audioEl, e);
-          });
-
-          button.removeEventListener("click", toggle);
-          // to  avoid overlap event
-          button.addEventListener("click", toggle);
+          cacheAudioFile(xhr.response[0].name, link);
         } else {
         }
       }
@@ -188,4 +177,15 @@ async function songSheft(e, link) {
 
     xhr.send(data);
   }
+  audioEl.addEventListener("timeupdate", (e) => {
+    ({ duration, currentTime: Ctime } = e.target);
+    Time(duration, audioEl);
+  });
+  document.querySelector(".bar").addEventListener("click", (e) => {
+    withActivated(audioEl, e);
+  });
+
+  button.removeEventListener("click", toggle);
+  // to  avoid overlap event
+  button.addEventListener("click", toggle);
 }
