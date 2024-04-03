@@ -51,7 +51,7 @@ async function generate() {
   jsonData.map((item) => {
     const linkEl = document.createElement("a");
     linkEl.textContent = "click";
-    linkEl.href = item.name;
+    linkEl.href = item.id;
     linkEl.className = "col-6 col-md-4 col-lg-3";
     document.querySelector(".link-container").appendChild(linkEl);
     linkEl.addEventListener("click", (e) => {
@@ -155,12 +155,32 @@ async function songSheft(e, link) {
   e.preventDefault();
   const cache = await caches.open("audio-cache");
   const cachedResponse = await cache.match(link);
+
   if (cachedResponse) {
     console.log(cachedResponse);
     console.log("hi");
     playCachedAudioFile(cachedResponse, audioEl);
   } else {
-    audioEl.src = link;
-    audioEl.play();
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "api/play.php", true);
+    xhr.responseType = "json";
+    xhr.setRequestHeader("Content-Type", "application/json");
+    https: xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          console.log(this.response[0].name);
+          const audioCtx = new AudioContext();
+          const audioUrl = this.response[0].name;
+          const audio = new Audio(audioUrl);
+          audio.setAttribute("crossorigin", "anonymous");
+          const source = audioCtx.createMediaElementSource(audio);
+          source.connect(audioCtx.destination);
+          audio.play();
+        } else {
+        }
+      }
+    };
+    var data = JSON.stringify({ song: link });
+    xhr.send(data);
   }
 }
