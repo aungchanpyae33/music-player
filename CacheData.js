@@ -11,7 +11,7 @@ async function cacheDatabaseData(name, data) {
   }
   setTimeout(async () => {
     const OpenCache = await caches.open("data-array");
-    await Cache.delete(OpenCache);
+    await OpenCache.delete(name);
     console.log("data delete");
   }, DeleteTime);
 }

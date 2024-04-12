@@ -1,5 +1,7 @@
 import cacheAudioFile from "./service-worker.js";
 import playCachedAudioFile from "./cacheSong.js";
+import cacheDatabaseData from "./CacheData.js";
+import getCacheArray from "./GetArray.js";
 const backButton = document.querySelector(".back");
 
 // import a plugin
@@ -44,11 +46,16 @@ async function generate() {
   const url = "api/connect.php";
   const fetchData = await fetch(url);
   const jsonData = await fetchData.json();
+  return jsonData;
+}
 
-  songLength = jsonData.length;
-
+async function ff() {
+  const data = (await getCacheArray("arrayData")) || (await generate());
+  console.log(data);
+  songLength = data.length;
   document.querySelector(".lds-ellipsis").classList.add("hide");
-  jsonData.map((item) => {
+
+  data.map((item) => {
     const linkEl = document.createElement("a");
     linkEl.textContent = "click";
     linkEl.href = item.name;
@@ -59,20 +66,22 @@ async function generate() {
       let link = e.target.getAttribute("href");
       e.preventDefault();
       document.querySelector(".audio-main").classList.add("see");
-      songSheft(e, link);
+      songSheft(e, link, item.id);
 
       previousSong = link;
     });
   });
-  audioEl.addEventListener("ended", (e) => {
-    songLength = jsonData.indexOf(previousSong);
-    songSheft(e, jsonData[songLength + 1]);
-    previousSong = jsonData[songLength + 1];
-  });
+  if ((await getCacheArray("arrayData")) === null)
+    cacheDatabaseData("arrayData", data);
 }
+ff();
+audioEl.addEventListener("ended", (e) => {
+  songLength = jsonData.indexOf(previousSong);
+  songSheft(e, jsonData[songLength + 1]);
+  previousSong = jsonData[songLength + 1];
+});
 
 //
-generate();
 
 // to get timeupadte
 function Time(duration, item) {
@@ -149,18 +158,32 @@ function withActivated(audio, e) {
   para.querySelector(".p-bar").style.width = `${ePer}%`;
 }
 
-async function songSheft(e, link) {
+async function songSheft(e, link, id) {
   button.textContent = "pause";
   isPLaying = false;
   e.preventDefault();
-  const cache = await caches.open("audio-cache");
-  const cachedResponse = await cache.match(link);
+  const Cache = await caches.open("audio-cache");
+  const cachedResponse = await Cache.match(id);
   if (cachedResponse) {
     console.log(cachedResponse);
     console.log("hi");
     playCachedAudioFile(cachedResponse, audioEl);
   } else {
-    audioEl.src = link;
+    const audioUrl = link;
+    audioEl.src = audioUrl;
     audioEl.play();
   }
+
+  previousAudio = audioEl;
+  audioEl.addEventListener("timeupdate", (e) => {
+    ({ duration, currentTime: Ctime } = e.target);
+    Time(duration, audioEl);
+  });
+  document.querySelector(".bar").addEventListener("click", (e) => {
+    withActivated(audioEl, e);
+  });
+
+  button.removeEventListener("click", toggle);
+  // to  avoid overlap event
+  button.addEventListener("click", toggle);
 }
