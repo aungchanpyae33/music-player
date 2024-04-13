@@ -169,9 +169,15 @@ async function songSheft(e, link, id) {
     console.log("hi");
     playCachedAudioFile(cachedResponse, audioEl);
   } else {
+    let audioContext = new AudioContext();
     const audioUrl = link;
-    audioEl.src = audioUrl;
-    audioEl.play();
+    const Response = await fetch(audioUrl);
+    const arrayBuffer = await Response.arrayBuffer();
+    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+    const smapleSource = audioContext.createBufferSource();
+    smapleSource.buffer = audioBuffer;
+    smapleSource.connect(audioContext.destination);
+    smapleSource.start();
   }
 
   previousAudio = audioEl;
