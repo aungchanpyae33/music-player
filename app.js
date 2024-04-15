@@ -43,7 +43,7 @@ let previousSong;
 // nextButton.addEventListener("click", back);
 // backButton.addEventListener("click", next);
 async function generate() {
-  const url = "api/connect.php";
+  const url = "https://music-player-psi-ten.vercel.app/api/connect";
   const fetchData = await fetch(url);
   const jsonData = await fetchData.json();
   return jsonData;
@@ -169,15 +169,9 @@ async function songSheft(e, link, id) {
     console.log("hi");
     playCachedAudioFile(cachedResponse, audioEl);
   } else {
-    let audioContext = new AudioContext();
     const audioUrl = link;
-    const Response = await fetch(audioUrl);
-    const arrayBuffer = await Response.arrayBuffer();
-    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-    const smapleSource = audioContext.createBufferSource();
-    smapleSource.buffer = audioBuffer;
-    smapleSource.connect(audioContext.destination);
-    smapleSource.start();
+    audioEl.src = audioUrl;
+    audioEl.play();
   }
 
   previousAudio = audioEl;

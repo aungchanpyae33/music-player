@@ -8,9 +8,7 @@
   border: 3px solid red;
   position: relative;
 }
-.audio-container > div .audio-main {
-  display: none;
-}
+
 .audio-container > div .audio-show {
   display: block;
   background-color: #57b6e9;
@@ -26,12 +24,7 @@ a {
 audio {
   background-color: red;
 }
-.audio-main {
-  display: none;
-}
-.see {
-  display: block;
-}
+
 .container {
   width: 200px;
   height: 200px;
@@ -120,7 +113,4 @@ audio {
   100% {
     transform: translate(24px, 0);
   }
-}
-.hide {
-  display: none;
 }
