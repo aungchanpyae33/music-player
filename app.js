@@ -43,7 +43,7 @@ let previousSong;
 // nextButton.addEventListener("click", back);
 // backButton.addEventListener("click", next);
 async function generate() {
-  const url = "https://music-player-psi-ten.vercel.app/api/connect";
+  const url = "api/connect.php";
   const fetchData = await fetch(url);
   const jsonData = await fetchData.json();
   return jsonData;
@@ -53,7 +53,6 @@ async function ff() {
   const data = (await getCacheArray("arrayData")) || (await generate());
   console.log(data);
   songLength = data.length;
-  document.querySelector(".lds-ellipsis").classList.add("hide");
 
   data.map((item) => {
     const linkEl = document.createElement("a");

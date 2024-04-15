@@ -1,7 +1,0 @@
-{
-  "require": {
-    "aws/aws-sdk-php": "^3.300",
-    "php": "^7.3",
-    "tracy/tracy": "^2.6.0"
-  }
-}
