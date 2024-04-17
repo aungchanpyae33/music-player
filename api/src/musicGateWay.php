@@ -1,27 +1,21 @@
 <?php
-
 class MusicGateWay{
+ private $conn;
 
-  private PDO $conn;
-  public function __construct(Database $database){
-    $this->conn = $database->dbConnect();
-  }
+ public function __construct(DatabaseConnect $database){
+   $this->conn = $database->connect();
+ }
 
-  public function GetAll() {
-    $sql = "SELECT * FROM roles";
-
-    $stmt = $this->conn->query($sql);
-    $data = [];
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-      $data[] = $row;
-    }
+ public function getAll(){
+  $sql = "SELECT  name,id FROM music";
+  $runQuery = pg_query($this->conn,$sql);
+  if($runQuery){
+    $data = pg_fetch_all($runQuery);
     return $data;
+  }else{
+    http_response_code(404);
+    preg_last_error($this->conn);
   }
-
-  
-public function create($data){
- $sql = "INSERT INTO roles (name,value) VALUES(:name , :value)";
-
- $stmt = $this->conn->prepare($sql);
-}
+  pg_close($this->conn);
+ }
 }

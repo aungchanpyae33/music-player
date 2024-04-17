@@ -1,29 +1,28 @@
 <?php
-class musicController {
-  public function __construct(private MusicGateWay $musicgate){}
-
-  public function processMusicRequest($method,$id){
+ class MusicController{
+  public function __construct(private MusicGateWay $musicGate){}
+  public function reciveRequest($method,$id){
     if($id){
-       $this->specSong($id);
-    }else{
-      $this->songCollect($method);
+     $this->requestForSpecData($id);
+    }
+    else{
+     $this->requestForDataGroup($method);
     }
   }
-
-  private function specSong($id){
-    print_r($method, $id);
+  
+  public function requestForSpecData($id){
+    print_r($id);
   }
 
-  private function songCollect($method){
-    switch($method){
-      case 'GET' :
-        echo json_encode($this->musicgate->GetALL());
-        break;
+  public function requestForDataGroup($method){
+    switch ($method){
+      case  'GET' : 
+        print_r(json_encode($this->musicGate->getAll()));
+      break;
 
-      case "POST":
-        $data=  (array) json_decode(file_get_contents("php://input"));
-        var_dump($data);
+      case 'POST' :
+      print_r('post');
     }
   }
-
-}
+  
+ }

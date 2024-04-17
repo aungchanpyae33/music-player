@@ -43,7 +43,7 @@ let previousSong;
 // nextButton.addEventListener("click", back);
 // backButton.addEventListener("click", next);
 async function generate() {
-  const url = "api/connect.php";
+  const url = "api/index.php";
   const fetchData = await fetch(url);
   const jsonData = await fetchData.json();
   return jsonData;
